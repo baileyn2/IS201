@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Simulator</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e6e6e6;
+            color: #111;
+            text-align: center;
+        }
+        #matchups {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #matchups > div {
+        background: white;
+        margin: 15px 0;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        button {
+        margin: 5px;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>NBA Play-in Simulator</h1>
+
+    <div id="matchups"></div>
+<div id="results"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+const matchups = document.getElementById("matchups");
+const results = document.getElementById("results");
+
+let state = "e1";
+
+/* EAST */
+let e1Winner = "";
+let e1Loser = "";
+let e2Winner = "";
+let e3Winner = "";
+
+/* WEST */
+let w1Winner = "";
+let w1Loser = "";
+let w2Winner = "";
+let w3Winner = "";
+
+function render() {
+
+    if (state === "e1") {
+        matchups.innerHTML = `
+            <h3>East Game 1</h3>
+            <p>Magic vs 76ers</p>
+            <button data-team="Magic">Magic</button>
+            <button data-team="76ers">76ers</button>
+        `;
+    }
+
+    if (state === "e2") {
+        matchups.innerHTML = `
+            <h3>East Game 2</h3>
+            <p>Heat vs Hornets</p>
+            <button data-team="Heat">Heat</button>
+            <button data-team="Hornets">Hornets</button>
+        `;
+    }
+
+    if (state === "e3") {
+        matchups.innerHTML = `
+            <h3>East Game 3</h3>
+            <p>${e1Loser} vs ${e2Winner}</p>
+            <button data-team="${e1Loser}">${e1Loser}</button>
+            <button data-team="${e2Winner}">${e2Winner}</button>
+        `;
+    }
+
+    if (state === "w1") {
+        matchups.innerHTML = `
+            <h3>West Game 1</h3>
+            <p>Suns vs Trail Blazers</p>
+            <button data-team="Suns">Suns</button>
+            <button data-team="Trail Blazers">Trail Blazers</button>
+        `;
+    }
+
+    if (state === "w2") {
+        matchups.innerHTML = `
+            <h3>West Game 2</h3>
+            <p>Warriors vs Clippers</p>
+            <button data-team="Warriors">Warriors</button>
+            <button data-team="Clippers">Clippers</button>
+        `;
+    }
+
+    if (state === "w3") {
+        matchups.innerHTML = `
+            <h3>West Game 3</h3>
+            <p>${w1Loser} vs ${w2Winner}</p>
+            <button data-team="${w1Loser}">${w1Loser}</button>
+            <button data-team="${w2Winner}">${w2Winner}</button>
+        `;
+    }
+
+    if (state === "done") {
+        matchups.innerHTML = "";
+        results.innerHTML = `
+            <h3>Play-In Results</h3>
+
+            <p><strong>East:</strong> ${e1Winner}, ${e3Winner}</p>
+            <p><strong>West:</strong> ${w1Winner}, ${w3Winner}</p>
+        `;
+    }
+}
+
+matchups.addEventListener("click", (e) => {
+    if (e.target.tagName !== "BUTTON") return;
+
+    const team = e.target.dataset.team;
+
+    /* EAST FLOW */
+    if (state === "e1") {
+        e1Winner = team;
+        e1Loser = (team === "Magic") ? "76ers" : "Magic";
+        state = "e2";
+    }
+
+    else if (state === "e2") {
+        e2Winner = team;
+        state = "e3";
+    }
+
+    else if (state === "e3") {
+        e3Winner = team;
+        state = "w1";
+    }
+
+    /* WEST FLOW */
+    else if (state === "w1") {
+        w1Winner = team;
+        w1Loser = (team === "Suns") ? "Trail Blazers" : "Suns";
+        state = "w2";
+    }
+
+    else if (state === "w2") {
+        w2Winner = team;
+        state = "w3";
+    }
+
+    else if (state === "w3") {
+        w3Winner = team;
+        state = "done";
+    }
+
+    render();
+});
+
+render();
+
+});
+</script>
+</body>
+</html>
+
+</body>
+</html>
